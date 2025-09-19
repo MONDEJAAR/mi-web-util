@@ -1,10 +1,117 @@
-/* Estilos personalizados */
+/* ===============================
+   Estilos personalizados
+   =============================== */
+
+/* Fuente y color base */
 body {
   background-color: #fdfdfd;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Hero principal */
+.hero.is-info {
+  background: linear-gradient(135deg, #3273dc, #23d160);
+  color: white;
+}
+
+/* Contenedor principal */
+.container {
+  max-width: 960px;
+}
+
+/* Botones con transición */
+.button {
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Inputs y textarea */
+.input,
+.textarea {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: border-color 0.2s;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #23d160;
+  box-shadow: 0 0 0 0.1rem rgba(35,209,96,0.25);
+}
+
+/* Caja de tareas */
+#taskList li {
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  list-style: none;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+#taskList li:hover {
+  background: #f0f8ff;
 }
 
 /* Caja de tareas completadas */
 li.has-text-grey-light {
   text-decoration: line-through;
-  opacity: 0.7;
+  opacity: 0.6;
+  background: #f5f5f5;
+}
+
+/* Notas */
+#noteArea {
+  border-radius: 12px;
+  background: #fffefa;
+}
+
+/* Formularios */
+form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Footer (si lo agregamos después) */
+footer {
+  background: #f5f5f5;
+  padding: 20px 0;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+
+/* Post-it */
+.post-it {
+  background: #fff58c;
+  width: 250px;
+  min-height: 150px;
+  padding: 20px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  color: #333;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+  transform: rotate(-2deg);
+  transition: transform 0.2s;
+  white-space: pre-wrap; /* Para respetar saltos de línea */
+}
+
+.post-it:hover {
+  transform: rotate(0deg) scale(1.02);
 }
