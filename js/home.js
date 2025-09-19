@@ -1,21 +1,38 @@
-// Mostrar notas y tareas en index
 document.addEventListener("DOMContentLoaded", () => {
-  // === Mostrar Notas ===
+  // === Notas ===
   const notesContainer = document.getElementById("postItsContainer");
-  const notas = JSON.parse(localStorage.getItem("notas")) || [];
+  let notas = JSON.parse(localStorage.getItem("notas")) || [];
 
-  if (notas.length > 0) {
-    notas.forEach((nota) => {
+  const renderNotas = () => {
+    notesContainer.innerHTML = "";
+    if (notas.length === 0) {
+      notesContainer.innerHTML = "<p>No tienes notas guardadas aún ✍️</p>";
+      return;
+    }
+
+    notas.forEach((nota, index) => {
       const div = document.createElement("div");
       div.classList.add("post-it");
       div.textContent = nota;
+
+      // Botón borrar
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "❌";
+      delBtn.classList.add("delete-btn");
+      delBtn.addEventListener("click", () => {
+        notas.splice(index, 1);
+        localStorage.setItem("notas", JSON.stringify(notas));
+        renderNotas();
+      });
+
+      div.appendChild(delBtn);
       notesContainer.appendChild(div);
     });
-  } else {
-    notesContainer.innerHTML = "<p>No tienes notas guardadas aún ✍️</p>";
-  }
+  };
 
-  // === Mostrar Tareas ===
+  renderNotas();
+
+  // === Tareas ===
   const tasksContainer = document.getElementById("taskListHome");
   let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
 
