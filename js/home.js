@@ -14,8 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.classList.add("post-it");
       div.textContent = nota;
+      div.id = `nota-${index}`;
+      div.setAttribute("draggable", "true");
 
-      // Botón borrar
+      div.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", div.id);
+      });
+
       const delBtn = document.createElement("button");
       delBtn.textContent = "❌";
       delBtn.classList.add("delete-btn");
@@ -28,9 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
       div.appendChild(delBtn);
       notesContainer.appendChild(div);
     });
-
-    // actualizar arrastrables
-    updateDraggables(notesContainer, ".post-it");
   };
 
   renderNotas();
@@ -49,12 +51,16 @@ document.addEventListener("DOMContentLoaded", () => {
     tareas.forEach((tarea, index) => {
       const li = document.createElement("li");
       li.classList.add("task-item");
+      li.id = `tarea-${index}`;
+      li.setAttribute("draggable", "true");
+
+      li.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", li.id);
+      });
 
       const span = document.createElement("span");
       span.textContent = tarea.texto;
-      if (tarea.completada) {
-        span.classList.add("has-text-grey-light");
-      }
+      if (tarea.completada) span.classList.add("has-text-grey-light");
 
       span.addEventListener("click", () => {
         tareas[index].completada = !tareas[index].completada;
@@ -62,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTareas();
       });
 
-      // Botón borrar
       const delBtn = document.createElement("button");
       delBtn.textContent = "❌";
       delBtn.classList.add("delete-btn");
@@ -76,9 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
       li.appendChild(delBtn);
       tasksContainer.appendChild(li);
     });
-
-    // actualizar arrastrables
-    updateDraggables(tasksContainer, ".task-item");
   };
 
   renderTareas();
@@ -87,42 +89,72 @@ document.addEventListener("DOMContentLoaded", () => {
   const calendarEl = document.getElementById("calendar");
 
   if (calendarEl) {
-    function renderCalendar() {
-      const daysInMonth = 30; // de momento fijo
-      for (let i = 1; i <= daysInMonth; i++) {
-        const day = document.createElement("div");
-        day.classList.add("calendar-day");
-        day.dataset.day = i;
-        day.innerHTML = `<strong>${i}</strong>`;
-        day.addEventListener("dragover", e => e.preventDefault());
-        day.addEventListener("drop", handleDrop);
-        calendarEl.appendChild(day);
-      }
-    }
+   function renderCalendar() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth(); // 0 = enero
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const monthNames = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ];
+
+  calendarEl.innerHTML = "";
+
+  // Contenedor del mes
+  const monthHeader = document.createElement("div");
+  monthHeader.style.textAlign = "center"; // centrar el nombre
+  monthHeader.style.marginBottom = "10px"; // separación
+  monthHeader.innerHTML = `<h3 class="title is-5">${monthNames[month]} ${year}</h3>`;
+  calendarEl.appendChild(monthHeader);
+
+  // Contenedor grid
+  const grid = document.createElement("div");
+  grid.classList.add("calendar-grid");
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const day = document.createElement("div");
+    day.classList.add("calendar-day");
+    day.dataset.day = i;
+    day.innerHTML = `<strong>${i}</strong>`;
+    day.addEventListener("dragover", e => e.preventDefault());
+    day.addEventListener("drop", handleDrop);
+    grid.appendChild(day);
+  }
+
+  calendarEl.appendChild(grid);
+}
+
 
     function handleDrop(e) {
       e.preventDefault();
-      const noteId = e.dataTransfer.getData("text/plain");
-      const draggedEl = document.getElementById(noteId);
+      const elId = e.dataTransfer.getData("text/plain");
+      const draggedEl = document.getElementById(elId);
+
       if (draggedEl) {
         const clone = draggedEl.cloneNode(true);
         clone.classList.add("calendar-note");
         clone.removeAttribute("id");
+
+        const oldDelBtn = clone.querySelector(".delete-btn");
+        if (oldDelBtn) oldDelBtn.remove();
+
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "❌";
+        delBtn.classList.add("delete-btn");
+        delBtn.style.position = "absolute";
+        delBtn.style.top = "2px";
+        delBtn.style.right = "4px";
+        delBtn.addEventListener("click", () => clone.remove());
+
+        clone.style.position = "relative";
+        clone.appendChild(delBtn);
+
         this.appendChild(clone);
       }
     }
 
     renderCalendar();
-  }
-
-  // === Funciones drag & drop genéricas ===
-  function updateDraggables(container, selector) {
-    container.querySelectorAll(selector).forEach((el, idx) => {
-      el.setAttribute("draggable", "true");
-      if (!el.id) el.id = `${selector.replace(".", "")}-${idx}`;
-      el.addEventListener("dragstart", e => {
-        e.dataTransfer.setData("text/plain", el.id);
-      });
-    });
   }
 });
