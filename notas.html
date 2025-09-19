@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Notas</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/navbar.js"></script>
+  <script defer src="js/notas.js"></script>
+</head>
+<body>
+  <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="index.html"><strong>Mi Web Útil</strong></a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="navMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="tareas.html">Tareas</a>
+        <a class="navbar-item" href="notas.html">Notas</a>
+        <a class="navbar-item" href="contacto.html">Contacto</a>
+        <a class="navbar-item" href="about.html">Acerca de</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Notas rápidas</h1>
+      <textarea id="noteArea" class="textarea" rows="10" placeholder="Escribe tus notas aquí..."></textarea>
+      <button id="saveBtn" class="button is-success mt-3">Guardar</button>
+    </div>
+  </section>
+</body>
+</html>
