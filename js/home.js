@@ -17,18 +17,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === Mostrar Tareas ===
   const tasksContainer = document.getElementById("taskListHome");
-  const tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+  let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
 
-  if (tareas.length > 0) {
-    tareas.forEach((tarea) => {
+  const renderTareas = () => {
+    tasksContainer.innerHTML = "";
+    if (tareas.length === 0) {
+      tasksContainer.innerHTML = "<p>No tienes tareas guardadas aún 📝</p>";
+      return;
+    }
+
+    tareas.forEach((tarea, index) => {
       const li = document.createElement("li");
-      li.textContent = tarea.texto;
+      li.classList.add("task-item");
+
+      const span = document.createElement("span");
+      span.textContent = tarea.texto;
       if (tarea.completada) {
-        li.classList.add("has-text-grey-light");
+        span.classList.add("has-text-grey-light");
       }
+
+      span.addEventListener("click", () => {
+        tareas[index].completada = !tareas[index].completada;
+        localStorage.setItem("tareas", JSON.stringify(tareas));
+        renderTareas();
+      });
+
+      // Botón borrar
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "❌";
+      delBtn.classList.add("delete-btn");
+      delBtn.addEventListener("click", () => {
+        tareas.splice(index, 1);
+        localStorage.setItem("tareas", JSON.stringify(tareas));
+        renderTareas();
+      });
+
+      li.appendChild(span);
+      li.appendChild(delBtn);
       tasksContainer.appendChild(li);
     });
-  } else {
-    tasksContainer.innerHTML = "<p>No tienes tareas guardadas aún 📝</p>";
-  }
+  };
+
+  renderTareas();
 });
