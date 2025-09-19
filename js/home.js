@@ -28,6 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
       div.appendChild(delBtn);
       notesContainer.appendChild(div);
     });
+
+    // actualizar arrastrables
+    updateDraggables(notesContainer, ".post-it");
   };
 
   renderNotas();
@@ -73,7 +76,53 @@ document.addEventListener("DOMContentLoaded", () => {
       li.appendChild(delBtn);
       tasksContainer.appendChild(li);
     });
+
+    // actualizar arrastrables
+    updateDraggables(tasksContainer, ".task-item");
   };
 
   renderTareas();
+
+  // === Calendario ===
+  const calendarEl = document.getElementById("calendar");
+
+  if (calendarEl) {
+    function renderCalendar() {
+      const daysInMonth = 30; // de momento fijo
+      for (let i = 1; i <= daysInMonth; i++) {
+        const day = document.createElement("div");
+        day.classList.add("calendar-day");
+        day.dataset.day = i;
+        day.innerHTML = `<strong>${i}</strong>`;
+        day.addEventListener("dragover", e => e.preventDefault());
+        day.addEventListener("drop", handleDrop);
+        calendarEl.appendChild(day);
+      }
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      const noteId = e.dataTransfer.getData("text/plain");
+      const draggedEl = document.getElementById(noteId);
+      if (draggedEl) {
+        const clone = draggedEl.cloneNode(true);
+        clone.classList.add("calendar-note");
+        clone.removeAttribute("id");
+        this.appendChild(clone);
+      }
+    }
+
+    renderCalendar();
+  }
+
+  // === Funciones drag & drop genéricas ===
+  function updateDraggables(container, selector) {
+    container.querySelectorAll(selector).forEach((el, idx) => {
+      el.setAttribute("draggable", "true");
+      if (!el.id) el.id = `${selector.replace(".", "")}-${idx}`;
+      el.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", el.id);
+      });
+    });
+  }
 });
