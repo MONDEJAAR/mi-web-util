@@ -1,4 +1,3 @@
-
 body {
   background-color: #fdfdfd;
   font-family: 'Segoe UI', Roboto, sans-serif;
@@ -91,7 +90,6 @@ footer {
   font-size: 14px;
 }
 
-
 /* Post-it */
 .post-it {
   background: #fff58c;
@@ -106,6 +104,8 @@ footer {
   transform: rotate(-2deg);
   transition: transform 0.2s;
   white-space: pre-wrap; /* Para respetar saltos de línea */
+  margin: 20px auto;  /* Centra el post-it */
+  text-align: left;
 }
 
 .post-it:hover {
